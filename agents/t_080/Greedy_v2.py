@@ -55,27 +55,27 @@ class myAgent():
 
         player_state = next_state.agents[id]
 
-        def deduct_unfilled_pattern_line(player_state):
-            """
-            Deduct points for any unfilled pattern lines on the player's wall.
-            The penalty increases quadratically with the number of unfilled lines.
-            """
-            count = 0
+        # def deduct_unfilled_pattern_line(player_state):
+        #     """
+        #     Deduct points for any unfilled pattern lines on the player's wall.
+        #     The penalty increases quadratically with the number of unfilled lines.
+        #     """
+        #     count = 0
         
-            for i in range(len(player_state.lines_number)):
-                if player_state.lines_number[i] != i + 1:
-                    count += 1
-            return -count*count  # Penalty is squared for each unfilled line
+        #     for i in range(len(player_state.lines_number)):
+        #         if player_state.lines_number[i] != i + 1:
+        #             count += 1
+        #     return -count*count  # Penalty is squared for each unfilled line
 
-        def floor_penalty(player_state):
-            """
-            Calculate penalties based on tiles placed on the floor line,
-            which typically incurs negative points.
-            """
-            penalties = 0
-            for i in range(len(player_state.floor)):
-                penalties += player_state.floor[i] * player_state.FLOOR_SCORES[i]
-            return penalties
+        # def floor_penalty(player_state):
+        #     """
+        #     Calculate penalties based on tiles placed on the floor line,
+        #     which typically incurs negative points.
+        #     """
+        #     penalties = 0
+        #     for i in range(len(player_state.floor)):
+        #         penalties += player_state.floor[i] * player_state.FLOOR_SCORES[i]
+        #     return penalties
 
         def center_score(player_state):
             score = 0
@@ -102,8 +102,8 @@ class myAgent():
         if next_state.next_first_agent == id:
             score += 1
 
-        score += deduct_unfilled_pattern_line(player_state)
-        score += floor_penalty(player_state)
+        # score += deduct_unfilled_pattern_line(player_state)
+        # score += floor_penalty(player_state)
         score += center_score(player_state)
         score += get_pattern_score(player_state)
         score += player_state.ScoreRound()[0] # Round score from game mechanics
@@ -111,3 +111,12 @@ class myAgent():
 
 
         return score
+
+
+
+
+
+
+        import functools
+
+
