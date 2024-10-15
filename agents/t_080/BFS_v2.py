@@ -24,12 +24,9 @@ class myAgent():
         return self.GainScores(state, self.id, action)
         
 
-    # Take a list of actions and an initial state, and perform breadth-first search within a time limit.
-    # Return the first action that leads to goal, if any was found.
     def SelectAction(self, actions, rootstate):
         start_time = time.time()
         selected_actions = []
-        goal_in_ture = False
         queue = deque([ (deepcopy(rootstate),[]) ]) # Initialise queue. First node = root state and an empty path.
         
         # Conduct BFS starting from rootstate.
@@ -40,35 +37,29 @@ class myAgent():
             for a in new_actions: # Then, for each of these actions...
                 next_state = deepcopy(state)              
                 next_path  = path + [a]                   
-                goal, gain = self.DoAction(next_state, a) # Carry out this action on the state, return goal_reached, score gained
+                goal, gain = self.DoAction(next_state, a) # Carry out this action on the state and check if the goal is reached
                 if goal:
-                    # If the current action reached the goal, record the initial action & sort by negate gain (gain always > 0)
-                    heapq.heappush(selected_actions, (-gain, TieBreaker(), next_path[0]))
-                    goal_in_ture = True
-                else:
-                    queue.append((next_state, next_path))
-                    # if can't fill a full line, choose action that lowest the lost
-                    heapq.heappush(selected_actions, (0, TieBreaker(-gain), next_path[0]))
-            if goal_in_ture: break   # If a goal was found in this turn, stop searching.
+                    return next_path[0]  # If a goal is reached, return the first action leading to it
+                heapq.heappush(selected_actions, (-gain, id(next_path[0]), next_path[0])) # Track the best action by score
 
-        if len(selected_actions): return heapq.heappop(selected_actions)[2]
-        return random.choice(actions) # If no goal was found in the time limit, return a random action.
+                queue.append((next_state, next_path)) # Otherwise, keep exploring
         
+        if len(selected_actions): return heapq.heappop(selected_actions)[2] # Return the best action found
+        return random.choice(actions) # If no goal was found in the time limit, return a random action.
+
+
 
     def GainScores(self, state, agent_id, action):
+        # Compute the score based on the player's state after performing an action
         if action == "ENDROUND": return (False, float('-inf'))
-        _, _, tg = action
-        if tg.pattern_line_dest+1 != tg.number:
-            goal_reached = False
 
         plr_state = state.agents[agent_id]
         wall = deepcopy(plr_state.grid_state)
         gain =  self.CalculateRoundScore(plr_state, wall)
-
-        goal_reached = (gain > 0)
+        
+        goal_reached = (gain > 0)  # Treat positive score gain as reaching a goal
         return (goal_reached, gain)
 
-    
     def CalculateRoundScore(self, player_state, player_wall):
         """
         Calculate the round score for the player based on their wall state and penalties.
@@ -113,29 +104,7 @@ class myAgent():
         score += deduct_unfilled_pattern_line(player_state)
         score += floor_penalty(player_state)
         score += get_pattern_score(player_state)
-        score += player_state.ScoreRound()[0] # Round score from game mechanics
-        score += player_state.EndOfGameScore() # End of game score from game mechanics
+        score += player_state.ScoreRound()[0]  # Round score from game mechanics
+        score += player_state.EndOfGameScore()  # End of game score from game mechanics
 
-        return score 
-
-
-
-class TieBreaker:
-    def __init__(self, key=None):
-        self.key = key
-        self.timestamp = time.time()  
-
-    def __lt__(self, other):
-        if self.key is None or other.key is None:
-            return False
-        if self.key == other.key:
-            return self.timestamp < other.timestamp
-        return self.key < other.key
-
-    def __eq__(self, other):
-        if self.key is None or other.key is None:
-            return False
-        return self.key == other.key and self.timestamp == other.timestamp
-
-    def __str__(self):
-        return f"{self.key} at {self.timestamp:.6f}"
+        return score
