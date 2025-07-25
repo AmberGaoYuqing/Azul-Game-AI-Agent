@@ -1,148 +1,106 @@
-# Azul Game AI Agent 🎯
+# Azul: A Competitive Game 🎲
 
-This project implements an autonomous agent capable of playing the board game **Azul** competitively.
-The agent was developed using a modular architecture, allowing integration of multiple AI planning and decision-making strategies.
-
-> ⚠️ This version is published as an independent educational showcase.
-> All course-specific content and confidential assessment information have been removed.
+This repository contains the full implementation of the **Azul board game simulator and visualizer**, used for building and testing intelligent agents in a competitive environment. It provides a modular codebase including core game logic, rule enforcement, rendering, and agent integration.
 
 ---
 
-## 🎮 About the Game
+##  Key Files
 
-**Azul** is a two-player strategy board game where players take turns selecting colored tiles and placing them on their board to maximize points. The game involves complex planning, pattern recognition, and tactical adaptation.
+###  Main Logic:
 
-In this project, the Azul environment is simulated with a game engine and visual interface. The agent interacts with the engine using defined APIs and must make decisions under strict time constraints (1 second per move, with a 15-second initialization buffer).
+* `core/azul_model.py` – Implements Azul game mechanics and state transitions. Includes methods like `getLegalActions()` and game simulation support.
+* `core/azul_utils.py` – Contains constants and utility functions related to Azul tiles, board structure, and rules.
+* `core/general_game_runner.py` – Command-line runner that manages matches, replays, logging, and display.
+* `core/player_interface.py` – Interface definition for AI agents to interact with the game engine.
 
-More information on the board game rules can be found [here](https://www.ultraboardgames.com/azul/game-rules.php), or you can watch [this explanation video](https://youtu.be/y0sUnocTRrY)  .
+###  Agent Examples:
 
----
+* `agents/generic/single_lookahead.py` – A basic lookahead agent skeleton showing how to structure agent logic.
+* `agents/generic/random.py` – A baseline agent making random moves, useful for testing.
+* `agents/sample_team/my_agent.py` – The agent you are meant to build and submit.
 
-## 🧠 Features & Techniques
-
-The agent integrates multiple AI decision-making modules and supports plug-and-play architecture for experimenting with different strategies:
-
-*  **Heuristic Search Algorithms**
-
-  * Using Azul-specific evaluation functions based on tile value, board layout, and completion potential.
-*  **Monte Carlo Tree Search (MCTS)**
-
-  * With UCT (Upper Confidence Bound) action selection for stochastic simulations.
-* ✅ **Rule-Based and Lookahead Agents**
-
-  * Including depth-limited planning and utility functions.
-* 🧠 Optional support for precomputed policy loading during the 15-second initialization period.
-* 🧪 Modular structure allowing easy replacement of decision-making modules.
+>  Only the folder `agents/t_XXX/` will be used in evaluation. You may add additional modules within it.
 
 ---
 
-## 🧩 Project Structure
+##  Game Interface
 
-```
-azul-agent/
-├── agents/
-│   └── sample_team/
-│       ├── my_agent.py       # Main logic of the autonomous agent
-│       ├── heuristics.py     # Heuristic evaluations
-│       ├── mcts.py           # Monte Carlo Tree Search logic
-│       └── utils.py          # Game state helpers and evaluation tools
-├── core/
-│   ├── azul_model.py         # Azul game logic and valid action generator
-│   ├── player_interface.py   # Interface class for agent interaction
-│   ├── general_game_runner.py # Game setup, runner, logging, and rendering
-│   └── azul_utils.py         # Constants and helpers
-├── tests/                    # Unit tests and agent comparisons
-└── README.md
-```
+When launched, the game provides two windows:
+
+* **Game window** – Displays the Azul board and current score.
+* **Activity log** – Shows the action history. Clickable to replay each step.
+
+A text-only mode is also available for headless environments.
 
 ---
 
-## 🚀 Getting Started
+## Running the Game
 
-**Dependencies**:
-
-* Python 3.8+
-* `func-timeout`, `pytz`
-
-Install dependencies:
+Install requirements:
 
 ```bash
 python -m pip install func_timeout pytz
 ```
 
-Run a match between two random agents:
+Run a sample game between random agents:
 
 ```bash
 python core/general_game_runner.py -g Azul -a [agents.generic.random,agents.generic.random]
 ```
 
-Run your agent against a random opponent:
+Run your agent:
 
 ```bash
 python core/general_game_runner.py -g Azul -a [agents.sample_team.my_agent,agents.generic.random]
 ```
 
-View options:
+Check all options:
 
 ```bash
 python core/general_game_runner.py -h
 ```
 
-Common options:
+Common flags:
 
-* `-t`: Text-only interface (for headless environments)
-* `-p`: Print output to terminal
-* `-s`: Save game replay
-* `-l`: Save game log
-
----
-
-## ⏱️ Time Constraints
-
-* Each agent has **1 second per move**.
-* A move exceeding **3 seconds** results in forfeiture.
-* A **15-second buffer** at game start is allowed for policy loading or other setup.
-
-Agents using multithreading or computing during the opponent’s turn will be **disqualified**.
+* `-t`: text mode
+* `-s`: save replay
+* `-l`: save logs
+* `--half-scale`: GUI scaling for small screens
 
 ---
 
-## 📊 Example Output
+##  Time & Fair Play Constraints
 
-The agent competes against various built-in strategies and logs decision details:
+* Each agent is given **1 second per move**.
+* Moves >3 seconds or excessive warnings lead to forfeiture.
+* A 15-second warm-up period at the start is allowed (e.g., for loading policies).
 
-```
-Turn 3: MCTS selected move [Factory 2 → Row 4] with expected value 3.27
-Turn 4: HeuristicAgent chose action [Factory 1 → Row 1] maximizing adjacency bonus
-```
-
----
-
-## 📘 Highlights
-
-* Competitive Azul AI built with modular, extendable architecture
-* Multiple strategies benchmarked in simulation
-* Designed for reproducibility and experimentation
-* Git-driven development and testing workflow
+Agents **may not use multi-threading** or compute during the opponent’s turn.
 
 ---
 
-## 📄 License
+##  Competition & Ranking
 
-This version is released under the [MIT License](LICENSE), which means you are free to use, modify, and share the code for **educational and non-commercial purposes**, provided that the original license and authorship notices are retained.
-
----
-
-## 🤛 About This Repository
-
-This is a **personal adaptation** and public showcase of an AI game-playing agent for Azul.
-It does **not** contain assessment content or confidential material from any university course.
-All implementations are original or modified and refactored for open sharing.
+* Agents are ranked using the [ELO system](https://en.wikipedia.org/wiki/Elo_rating_system)  .
+* Win: 3 pts, Tie: 1 pt, Loss: 0 pts
+* Staff teams with strong agents will participate in the tournament (prefix: `staff-`).
 
 ---
 
-## 🌟 Acknowledgements
+##  Warnings
 
-* Game rules adapted from the board game **Azul**
-* Code design inspired by AI planning, search, and MCTS strategies
-* Visualization and game engine structure inspired by general academic competition platforms
+* All `stdout`/`stderr` from your agent will be visible in tournament logs. Avoid leaking confidential info.
+* Crashes will be shown with stack traces in public logs.
+
+---
+
+##  Learn More
+
+* Official rules: [ultraboardgames.com/azul](https://www.ultraboardgames.com/azul/game-rules.php) &#x20;
+* Tutorial video by Becca Scott: [YouTube Link](https://youtu.be/y0sUnocTRrY) &#x20;
+
+---
+
+##  Summary
+
+This environment provides a rich platform for developing AI agents that play Azul competitively. With a robust and clean codebase, developers can focus on decision-making logic, experiment with strategies, and participate in tournament-style evaluation.
