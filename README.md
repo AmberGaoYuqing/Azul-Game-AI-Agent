@@ -10,8 +10,7 @@
 This project implements an autonomous agent capable of playing the board game **Azul** competitively.
 The agent was developed using a modular architecture, allowing integration of multiple AI planning and decision-making strategies.
 
-> ⚠️ This version is published as an independent educational showcase.
-> All course-specific content and confidential assessment information have been removed.
+> ⚠️ This version is published as an independent educational showcase. All course-specific content and confidential assessment information have been removed.
 
 ---
 
@@ -29,13 +28,13 @@ More information on the board game rules can be found [here](https://www.ultrabo
 
 The agent integrates multiple AI decision-making modules and supports plug-and-play architecture for experimenting with different strategies:
 
-* ✅ **Heuristic Search Algorithms**
+*  **Heuristic Search Algorithms**
 
   * Using Azul-specific evaluation functions based on tile value, board layout, and completion potential.
-* ✅ **Monte Carlo Tree Search (MCTS)**
+*  **Monte Carlo Tree Search (MCTS)**
 
   * With UCT (Upper Confidence Bound) action selection for stochastic simulations.
-* ✅ **Rule-Based and Lookahead Agents**
+*  **Rule-Based and Lookahead Agents**
 
   * Including depth-limited planning and utility functions.
 *  Optional support for precomputed policy loading during the 15-second initialization period.

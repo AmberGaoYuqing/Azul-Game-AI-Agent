@@ -1,4 +1,4 @@
-# UoM COMP90054 Contest Project
+# Contest Project
 
 This Wiki can be used as external documentation to the project.
 1. [Home and Introduction]()
@@ -19,15 +19,6 @@ You can structure your wiki pages in many different sections and styles. The abo
 # Youtube presentation
 
 [![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/bnMl0d-RcPQ/0.jpg)](https://www.youtube.com/watch?v=bnMl0d-RcPQ)
-
-
-## Team Members
-
-List here the full name, email, and student number for each member of the team:
-
-* Student 1's Full Name - Student email - UoM Student number
-* Student 2's Full Name - Student email - UoM Student number
-* Student 3's Full Name - Student email - UoM Student number
 
 
 ## Useful links - Wiki features
